@@ -107,6 +107,8 @@ namespace RSC
             /**************************
              * Copy to USB Key (Manual)
              **************************/
+            // http://social.msdn.microsoft.com/Forums/vstudio/en-US/9f9eb8f5-297f-4acd-a9af-aafbe384fd71/usb-drives-list-but-only-those?forum=csharpgeneral
+
             Console.Write("Please insert a USB key...");
             Console.ReadLine();
         }
