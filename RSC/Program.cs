@@ -111,7 +111,7 @@ namespace RSC
                 }
             }
 
-            var RSCList = new DirectoryInfo(ROOT).GetFiles("AMIRSC*.txt").OrderBy(f => f.LastWriteTime).ToList();
+            var RSCList = new DirectoryInfo(ROOT).GetFiles("AMIRSC*.txt").OrderBy(f => f.CreationTime).ToList();
 
             if ((RSCList.Count() >= MIN_NUMBER_TO_PROCESS) || (ManualOverride))
             {
@@ -121,7 +121,7 @@ namespace RSC
 
                 foreach (var f in RSCList)
                 {
-                    if ((f.LastWriteTime.Date < DateTime.Now.Date && f.LastWriteTime.Hour <= CUTOFF_TIME) ||
+                    if ((f.LastWriteTime.Date < DateTime.Now.Date && f.CreationTime.Hour <= CUTOFF_TIME) ||
                         ManualOverride)
                     {
                         f.MoveTo(Path.Combine(path, f.Name));
