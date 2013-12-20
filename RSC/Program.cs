@@ -92,7 +92,7 @@ namespace RSC
 
             // Check previous RSC directories to see if the zip file is still present (if so that means they weren't processed)
             // Remark: Should I put in redundancy? Logically there should never be more than one folder that isn't processed.
-            var dirList = new DirectoryInfo(ROOT).GetDirectories().OrderBy( f => f.CreationTime).ToList();
+            var dirList = new DirectoryInfo(ROOT).GetDirectories().OrderBy(f => f.CreationTime).ToList();
 
             foreach (var dir in dirList)
             {
@@ -113,42 +113,52 @@ namespace RSC
 
             var RSCList = new DirectoryInfo(ROOT).GetFiles("AMIRSC*.txt").OrderBy(f => f.LastWriteTime).ToList();
 
-            if ((RSCList.Count() > MIN_NUMBER_TO_PROCESS) || (ManualOverride))
+            if ((RSCList.Count() >= MIN_NUMBER_TO_PROCESS) || (ManualOverride))
             {
+                string folder = "RSC_" + DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day;
+                string path = Path.Combine(ROOT, folder);
+                CreateDir(path);
+
                 foreach (var f in RSCList)
                 {
                     if ((f.LastWriteTime.Date < DateTime.Now.Date && f.LastWriteTime.Hour <= CUTOFF_TIME) ||
                         ManualOverride)
                     {
-                        string folder = "RSC_" + DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day;
-                        string path = Path.Combine(ROOT, folder);                        
-                        CreateDir(path);
+                        f.MoveTo(Path.Combine(path, f.Name));
+                    }
+                }
+                List<string> notifList = null;
 
-                        // Copy the new notifications into this directory
-                        foreach (var file in RSCList)
-                        {
-                            file.MoveTo(Path.Combine(path, file.Name));
-                        }
+                if (Directory.EnumerateFiles(path).Count() > 0)
+                {
+                    notifList = GetNoteList(path);
+                }
 
-                        List<string> notifList = GetNoteList(path);
+                // Copy the unprocessed files (if any)
+                if (oldList != null && delPath != null)
+                {
+                    foreach (var file in oldList)
+                    {
+                        file.MoveTo(Path.Combine(path, file.Name));
+                    }
 
-                        // Copy the unprocessed files (if any)
-                        if (oldList != null && delPath != null)
-                        {
-                            foreach (var file in oldList)
-                            {
-                                file.MoveTo(Path.Combine(path, file.Name));
-                            }
+                    Directory.Delete(delPath);
+                }
 
-                            Directory.Delete(delPath);
-                        }
-
+                if (Directory.EnumerateFiles(path).Count() > 0)
+                {
+                    if (notifList != null)
+                    {
                         // Write or append list.txt
                         WriteListFile(path, notifList);
-
-                        // Create the zip file
-                        CreateZip(path, Path.Combine(path, folder + ".zip"));
                     }
+
+                    // Create the zip file
+                    CreateZip(path, Path.Combine(path, folder + ".zip"));
+                }
+                else
+                {
+                    Directory.Delete(path);
                 }
             }
         }
