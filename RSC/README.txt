@@ -7,16 +7,39 @@ It will generate the appropriate list.txt and zip archive of the directory.
 
 TODO:
 Through using the following Outlook macro it is possible to automatically save emails as they are sent: 
-	
-	Sub SaveAsText(RSC As MailItem)
-		Dim name As String
-		Dim path As String
 
-		name = RSC.Subject + ".txt"
-		path = '<save location> ' Make sure to update the path to the local system (e.g. "C:\\RSC\\")
+		Sub SaveAsText(RSC As MailItem)
+			Dim name As String
+			Dim path As String
     
-		RSC.SaveAs path + name, olTXT    
-	End Sub
+			' Remove bad characters in the RSC notification subject lines
+			name = GetValidName(RSC.Subject)
+
+			' Make sure to update the path to the local system (e.g. "C:\RSC\")
+			RSC.SaveAs "E:\RSC\" & name & ".txt", olTXT
+    
+		End Sub
+
+		Function GetValidName(name As String)
+			' File Name cannot have these \ / : * ? " < > |
+			Dim sTemp As String
+    
+			sTemp = name
+    
+			sTemp = Replace(sTemp, "\", "")
+			sTemp = Replace(sTemp, "/", "")
+			sTemp = Replace(sTemp, ":", "")
+			sTemp = Replace(sTemp, "*", "")
+			sTemp = Replace(sTemp, "?", "")
+			sTemp = Replace(sTemp, """", "")
+			sTemp = Replace(sTemp, "<", "")
+			sTemp = Replace(sTemp, ">", "")
+			sTemp = Replace(sTemp, "|", "")
+    
+			GetValidName = sTemp
+		End Function
+
+
 	
 Using this I want to run some logic that runs around the same time as the mirror. 
 Can check to see how many messages there are waiting as well as what would have arrived before the mirroring process began.
