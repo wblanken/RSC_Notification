@@ -198,16 +198,16 @@ namespace RSC
             {
                 string fName = f.Name;
 
-                if (Settings.Default.processNum > 0)
+                if (Settings.Default.processNum > 0 && !f.Name.Contains("list.txt"))
                 {
                     fName = String.Format("call gRscUpd2.bat {0:00} \"{1}\"", Settings.Default.processNum, fName);
                     
-                    Settings.Default.processNum += 1;
+                    Settings.Default["processNum"] = Settings.Default.processNum + 1;
                     if (Settings.Default.processNum > 99)
                     {
-                        Settings.Default.processNum = 1;
+                        Settings.Default["processNum"] = 1;
                     }
-                    Settings.Default.Save();
+                    Properties.Settings.Default.Save(); // Note that this gets saved to C:\Users\<user>\AppData\Local\Hewlett-Packard\RSC.exe
                 }
                 else
                 {

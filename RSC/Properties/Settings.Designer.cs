@@ -23,51 +23,39 @@ namespace RSC.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int MIN_NUMBER_TO_PROCESS {
             get {
                 return ((int)(this["MIN_NUMBER_TO_PROCESS"]));
             }
-            set {
-                this["MIN_NUMBER_TO_PROCESS"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("22")]
         public int CUTOFF_TIME {
             get {
                 return ((int)(this["CUTOFF_TIME"]));
             }
-            set {
-                this["CUTOFF_TIME"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"E:\\\\RSC\\\\\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("E:\\RSC\\")]
         public string ROOT {
             get {
                 return ((string)(this["ROOT"]));
             }
-            set {
-                this["ROOT"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("-1")]
         public int ERROR {
             get {
                 return ((int)(this["ERROR"]));
-            }
-            set {
-                this["ERROR"] = value;
             }
         }
         
