@@ -5,15 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
+using RSC.Properties;
 
 namespace RSC
 {
     class Program
     {
-        const int MIN_NUMBER_TO_PROCESS = 3;
-        const int CUTOFF_TIME = 22; // 22 = 10 pm
-        const string ROOT = "E:\\RSC\\";
-
         static bool ManualOverride;
 
         static void Main(string[] args)
@@ -38,6 +35,7 @@ namespace RSC
              * (Not Implemented yet)
              **************************/
             // http://social.msdn.microsoft.com/Forums/vstudio/en-US/9f9eb8f5-297f-4acd-a9af-aafbe384fd71/usb-drives-list-but-only-those?forum=csharpgeneral
+
         }
 
         /// <summary>
@@ -92,7 +90,7 @@ namespace RSC
 
             // Check previous RSC directories to see if the zip file is still present (if so that means they weren't processed)
             // Remark: Should I put in redundancy? Logically there should never be more than one folder that isn't processed.
-            var dirList = new DirectoryInfo(ROOT).GetDirectories().OrderBy(f => f.CreationTime).ToList();
+            var dirList = new DirectoryInfo(Settings.Default.ROOT).GetDirectories().OrderBy(f => f.CreationTime).ToList();
 
             foreach (var dir in dirList)
             {
@@ -111,17 +109,17 @@ namespace RSC
                 }
             }
 
-            var RSCList = new DirectoryInfo(ROOT).GetFiles("AMIRSC*.txt").OrderBy(f => f.CreationTime).ToList();
+            var RSCList = new DirectoryInfo(Settings.Default.ROOT).GetFiles("AMIRSC*.txt").OrderBy(f => f.CreationTime).ToList();
 
-            if ((RSCList.Count() >= MIN_NUMBER_TO_PROCESS) || (ManualOverride))
+            if ((RSCList.Count() >= Settings.Default.MIN_NUMBER_TO_PROCESS) || (ManualOverride))
             {
                 string folder = "RSC_" + DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day;
-                string path = Path.Combine(ROOT, folder);
+                string path = Path.Combine(Settings.Default.ROOT, folder);
                 CreateDir(path);
 
                 foreach (var f in RSCList)
                 {
-                    if ((f.LastWriteTime.Date < DateTime.Now.Date && f.CreationTime.Hour <= CUTOFF_TIME) ||
+                    if ((f.LastWriteTime.Date < DateTime.Now.Date && f.CreationTime.Hour <= Settings.Default.CUTOFF_TIME) ||
                         ManualOverride)
                     {
                         f.MoveTo(Path.Combine(path, f.Name));
@@ -170,7 +168,7 @@ namespace RSC
         /// <param name="zip">The name of the zip file</param>
         private static void CreateZip(string path, string zip)
         {
-            string temp = Path.Combine(ROOT, "tmp");
+            string temp = Path.Combine(Settings.Default.ROOT, "tmp");
             FileInfo[] FileShare = new DirectoryInfo(path).GetFiles();
 
             Directory.CreateDirectory(temp);
@@ -200,7 +198,21 @@ namespace RSC
             {
                 string fName = f.Name;
 
-                fName = "call gRscUpd2.bat ## \"" + fName + "\"";
+                if (Settings.Default.processNum > 0)
+                {
+                    fName = String.Format("call gRscUpd2.bat {0:00} \"{1}\"", Settings.Default.processNum, fName);
+                    
+                    Settings.Default.processNum += 1;
+                    if (Settings.Default.processNum > 99)
+                    {
+                        Settings.Default.processNum = 1;
+                    }
+                    Settings.Default.Save();
+                }
+                else
+                {
+                    fName = "call gRscUpd2.bat ## \"" + fName + "\"";
+                }                   
 
                 retVal.Add(fName);
             }
