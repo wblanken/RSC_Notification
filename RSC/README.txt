@@ -46,13 +46,34 @@ USAGE:
 - Use argument '-m' (no quotes) to process all notifications regardless of time.
 
 
+CONFIGURATION:
+
+<add key="processNum" value="0" />	
+	This is the number for the current RSC folder (e.g. RSC_10) from 1 – 99, it will automatically roll back over to 1. Zero indicates no RSC folder is set and will result in the list.txt having the default ‘##’ instead so will need to be manually updated.
+
+<setting name="MIN_NUMBER_TO_PROCESS" serializeAs="String">
+	<value>3</value>
+</setting>
+	This is the minimum number of RSC notifications required for processing, I ignored if there were less than 3 but left it configurable.
+
+<setting name="CUTOFF_TIME" serializeAs="String">
+  <value>22</value>
+</setting>	
+	This is the cutoff time for processing in 24 hr format. Any notifications that come in after this time won’t be processed till the following day. Default is 10pm (22)
+
+<setting name="ROOT" serializeAs="String">
+  <value>E:\RSC\</value>
+</setting>	
+	This is the directory that the RSC emails will be saved to and the dated folders created.
+
+
 IDEAS:
 - [IMPLEMENTED] Check to see the number of RSC notifications in the folder.	 
 	- If exceeds X then create a folder and start the process.
 - [IMPLEMENTED] Check the creation time of the files to see if they came before or after approximately 3:00am 
 - [IMPLEMENTED] Figure out a way to check if the previous folder was processed or not and move them over.
 	- This will be tricky, could be something like user removes the zip file when it's copied to the USB key but seems risky.
-- Possibly create a USB copy portion
+- Possibly create a USB copy method
 	- Could list the available USB devices or prompt the user to insert one and enter the drive letter (or some variation)
 	- This could also tie back to the processed requests portion.
 - [IMPLEMENTED] Should keep track of the numbering scheme on the server, can update the ## with the appropriate #'s. 
