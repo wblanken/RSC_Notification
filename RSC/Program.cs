@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
 using RSC.Properties;
+using System.Configuration;
 
 namespace RSC
 {
@@ -197,17 +198,18 @@ namespace RSC
             foreach (var f in dirList)
             {
                 string fName = f.Name;
+                int processNum = Convert.ToInt32(ConfigurationManager.AppSettings.Get("processNum"));
 
-                if (Settings.Default.processNum > 0 && !f.Name.Contains("list.txt"))
+                if (processNum> 0 && !f.Name.Contains("list.txt"))
                 {
-                    fName = String.Format("call gRscUpd2.bat {0:00} \"{1}\"", Settings.Default.processNum, fName);
-                    
-                    Settings.Default["processNum"] = Settings.Default.processNum + 1;
-                    if (Settings.Default.processNum > 99)
+                    fName = String.Format("call gRscUpd2.bat {0:00} \"{1}\"", processNum, fName);
+
+                    ConfigurationManager.AppSettings.Set("processNum", (processNum + 1).ToString());
+
+                    if (processNum > 99)
                     {
-                        Settings.Default["processNum"] = 1;
+                        ConfigurationManager.AppSettings.Set("processNum", "1");
                     }
-                    Properties.Settings.Default.Save(); // Note that this gets saved to C:\Users\<user>\AppData\Local\Hewlett-Packard\RSC.exe
                 }
                 else
                 {

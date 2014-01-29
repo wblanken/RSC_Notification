@@ -41,6 +41,7 @@ Scheduling this application to run every day around the same time as the mirrori
 
 
 USAGE:
+- Simply place RSC.exe and RSC.exe.config in the folder where RSC notifications are saved.
 - Run the .exe and it will process all notifications that have arrived before the configured time (default 2200 or 10pm system time)
 - Use argument '-m' (no quotes) to process all notifications regardless of time.
 
@@ -56,7 +57,7 @@ IDEAS:
 	- This could also tie back to the processed requests portion.
 - [IMPLEMENTED] Should keep track of the numbering scheme on the server, can update the ## with the appropriate #'s. 
 	- This could be as simple as just do it once and it will always keep track but depends if the user wants to change scheme's ever.
-	- Thinking either 00 - 99 or 00 - FF scheme would be sufficient.
+	- 01 - 99 scheme would be sufficient.
 
 
 Future:

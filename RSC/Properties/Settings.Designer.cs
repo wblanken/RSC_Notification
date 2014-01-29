@@ -58,17 +58,5 @@ namespace RSC.Properties {
                 return ((int)(this["ERROR"]));
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("19")]
-        public int processNum {
-            get {
-                return ((int)(this["processNum"]));
-            }
-            set {
-                this["processNum"] = value;
-            }
-        }
     }
 }
