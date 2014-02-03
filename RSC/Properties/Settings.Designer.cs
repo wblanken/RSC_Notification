@@ -22,41 +22,5 @@ namespace RSC.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public int MIN_NUMBER_TO_PROCESS {
-            get {
-                return ((int)(this["MIN_NUMBER_TO_PROCESS"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("22")]
-        public int CUTOFF_TIME {
-            get {
-                return ((int)(this["CUTOFF_TIME"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\RSC\\")]
-        public string ROOT {
-            get {
-                return ((string)(this["ROOT"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
-        public int ERROR {
-            get {
-                return ((int)(this["ERROR"]));
-            }
-        }
     }
 }

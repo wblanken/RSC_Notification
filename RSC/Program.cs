@@ -89,9 +89,12 @@ namespace RSC
             FileInfo[] oldList = null;
             string delPath = null;
 
+            string root = ConfigurationManager.AppSettings.Get("ROOT");
+            int minNum = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MIN_NUMBER_TO_PROCESS"));
+            int cuttoff = Convert.ToInt32(ConfigurationManager.AppSettings.Get("CUTOFF_TIME"));
             // Check previous RSC directories to see if the zip file is still present (if so that means they weren't processed)
             // Remark: Should I put in redundancy? Logically there should never be more than one folder that isn't processed.
-            var dirList = new DirectoryInfo(Settings.Default.ROOT).GetDirectories().OrderBy(f => f.CreationTime).ToList();
+            var dirList = new DirectoryInfo(root).GetDirectories().OrderBy(f => f.CreationTime).ToList();
 
             foreach (var dir in dirList)
             {
@@ -110,17 +113,17 @@ namespace RSC
                 }
             }
 
-            var RSCList = new DirectoryInfo(Settings.Default.ROOT).GetFiles("AMIRSC*.txt").OrderBy(f => f.CreationTime).ToList();
+            var RSCList = new DirectoryInfo(root).GetFiles("AMIRSC*.txt").OrderBy(f => f.CreationTime).ToList();
 
-            if ((RSCList.Count() >= Settings.Default.MIN_NUMBER_TO_PROCESS) || (ManualOverride))
+            if ((RSCList.Count() >= minNum) || (ManualOverride))
             {
                 string folder = "RSC_" + DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day;
-                string path = Path.Combine(Settings.Default.ROOT, folder);
+                string path = Path.Combine(root, folder);
                 CreateDir(path);
 
                 foreach (var f in RSCList)
                 {
-                    if ((f.LastWriteTime.Date < DateTime.Now.Date && f.CreationTime.Hour <= Settings.Default.CUTOFF_TIME) ||
+                    if ((f.LastWriteTime.Date < DateTime.Now.Date && f.CreationTime.Hour <= cuttoff) ||
                         ManualOverride)
                     {
                         f.MoveTo(Path.Combine(path, f.Name));
@@ -169,7 +172,7 @@ namespace RSC
         /// <param name="zip">The name of the zip file</param>
         private static void CreateZip(string path, string zip)
         {
-            string temp = Path.Combine(Settings.Default.ROOT, "tmp");
+            string temp = Path.Combine(ConfigurationManager.AppSettings.Get("ROOT"), "tmp");
             FileInfo[] FileShare = new DirectoryInfo(path).GetFiles();
 
             Directory.CreateDirectory(temp);
